@@ -1,16 +1,565 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MMISBank</title>
-<style>
-:root{font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#14243b;background:#eef3f9}*{box-sizing:border-box}body{margin:0;min-height:100vh}.shell{max-width:470px;margin:24px auto;background:#fff;min-height:780px;border-radius:24px;overflow:hidden;box-shadow:0 16px 55px #18344e20}.head{background:linear-gradient(135deg,#084e9e,#077cc4);color:#fff;padding:24px 24px 32px}.headtop{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:800;font-size:21px;letter-spacing:-.5px}.demo{font-size:11px;background:#ffffff30;border:1px solid #ffffff66;padding:5px 9px;border-radius:30px}.sub{opacity:.83;font-size:13px;margin-top:25px}.balance{font-size:30px;font-weight:800;margin-top:5px}.balance small{font-size:16px}.content{padding:24px}.step{display:none}.step.active{display:block}h1{font-size:22px;margin:0 0 6px}p.muted{font-size:13px;color:#72829a;margin:0 0 22px;line-height:1.5}label{font-size:13px;font-weight:650;display:block;margin:17px 0 7px}input{border:1px solid #d9e3ef;background:#f9fbfe;border-radius:12px;padding:14px 15px;font:inherit;width:100%;outline:none}input:focus{border-color:#0b74ce;box-shadow:0 0 0 3px #0b74ce16}.btn{background:#076bc4;color:white;border:0;border-radius:13px;width:100%;padding:15px;font:inherit;font-weight:750;cursor:pointer;margin-top:24px}.btn:disabled{opacity:.5;cursor:not-allowed}.btn.secondary{background:#edf4fb;color:#1262a7;margin-top:10px}.hint{font-size:12px;color:#77879d;text-align:center;margin-top:14px;line-height:1.5}.error{color:#b72734;font-size:12px;margin-top:8px;min-height:16px}.progress{display:flex;gap:7px;margin:0 0 24px}.progress span{height:5px;background:#e6eef7;border-radius:8px;flex:1}.progress span.on{background:#0b7dd5}.summary{background:#f4f8fc;border:1px solid #e1eaf4;border-radius:14px;padding:16px;margin:18px 0}.summary div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;font-size:13px}.summary div strong{max-width:58%;text-align:right;overflow-wrap:anywhere}.camera{position:relative;width:100%;aspect-ratio:4/4.4;background:#122b43;border-radius:18px;overflow:hidden;display:grid;place-items:center;color:#b7d1e8}.camera video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}.oval{position:absolute;width:65%;height:73%;border:3px dashed #b4f7ff;border-radius:50%;pointer-events:none;box-shadow:0 0 0 100px #00162d48}.scanline{position:absolute;width:60%;height:3px;background:#51efff;box-shadow:0 0 15px #6df2ff;animation:scan 2s infinite alternate;display:none}.camera.scanning .scanline{display:block}@keyframes scan{from{transform:translateY(-105px)}to{transform:translateY(105px)}}.cammsg{position:absolute;bottom:14px;left:10px;right:10px;text-align:center;font-size:12px;background:#071b2bbb;border-radius:20px;padding:9px}.success{text-align:center;padding:28px 0}.check{display:grid;place-items:center;margin:0 auto 19px;width:90px;height:90px;border-radius:50%;background:#e5f8ec;color:#149d54;font-size:50px;font-weight:800}.amount{font-size:32px;font-weight:800;margin:18px 0 4px}.note{background:#fff7e7;border:1px solid #ffe0a3;border-radius:12px;padding:12px;font-size:12px;color:#7c5b1e;line-height:1.5;margin-top:20px}.footer{text-align:center;color:#9ca9b8;font-size:11px;padding:16px}.hidden{display:none!important}@media(max-width:520px){.shell{margin:0;min-height:100vh;border-radius:0}.head{padding:23px}.content{padding:23px}}@media(prefers-reduced-motion:reduce){.scanline{animation:none}}
-</style>
-</head>
-<body><main class="shell"><header class="head"><div class="headtop"><div class="brand">◈ MMISBank</div></div><div class="sub">Số dư tài khoản</div><div class="balance" id="balance">25.000.000 <small>VND</small></div></header><div class="content">
-<section class="step active" id="transfer"><div class="progress"><span class="on"></span><span></span><span></span></div><h1>Thông tin chuyển khoản</h1><form id="form"><label for="bank">Ngân hàng thụ hưởng</label><input id="bank" value="Ngân hàng MMISBank" required maxlength="80"><label for="account">Số tài khoản nhận</label><input id="account" inputmode="numeric" pattern="[0-9]{6,20}" placeholder="Nhập 6–20 chữ số" required><label for="receiver">Tên người nhận</label><input id="receiver" placeholder="Nguyễn Văn A" maxlength="100" required><label for="money">Số tiền (VND)</label><input id="money" type="number" min="1000" max="1300000000" step="1000" placeholder="Ví dụ: 500000" required><label for="memo">Nội dung chuyển khoản</label><input id="memo" value="MMIS chuyen khoan" maxlength="140"><div class="error" id="formError" role="alert"></div><button class="btn" type="submit">Tiếp tục xác thực →</button></form></section>
-<section class="step" id="verify"><div class="progress"><span class="on"></span><span class="on"></span><span></span></div><h1>Xác thực khuôn mặt</h1><p class="muted">Đặt khuôn mặt vào khung camera.</p><div class="summary" id="verifySummary"></div><div class="camera" id="cameraBox"><video id="video" autoplay muted playsinline></video><div class="oval"></div><div class="scanline"></div><div class="cammsg" id="camMsg">Nhấn “Bật camera” để bắt đầu</div></div><div class="error" id="camError" role="alert"></div><button class="btn" id="startCam">Bật camera</button><button class="btn hidden" id="scanBtn">Bắt đầu quét</button><button class="btn secondary" id="backBtn">← Quay lại</button></section>
-<section class="step" id="done"><div class="progress"><span class="on"></span><span class="on"></span><span class="on"></span></div><div class="success"><div class="check">✓</div><h1>Chuyển khoản thành công!</h1><p class="muted">Giao dịch hoàn tất.</p><div class="amount" id="doneAmount"></div><p class="muted">VND</p></div><div class="summary" id="doneSummary"></div><button class="btn" id="again">Thực hiện giao dịch khác</button><button class="btn secondary" id="reset">Đặt lại số dư</button></section>
-</div><div class="footer">MMISBank · OriginDev</div></main>
-<script>
-(()=>{'use strict';const INITIAL=1300000000;let balance=INITIAL,stream=null,transaction=null,busy=false;const $=id=>document.getElementById(id),money=n=>new Intl.NumberFormat('vi-VN').format(n),safe=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));function updateBalance(){$('balance').innerHTML=money(balance)+' <small>VND</small>'}function page(id){document.querySelectorAll('.step').forEach(s=>s.classList.toggle('active',s.id===id))}function stopCam(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}$('video').srcObject=null;$('cameraBox').classList.remove('scanning')}function detail(t){return `<div><span>Ngân hàng</span><strong>${safe(t.bank)}</strong></div><div><span>Người nhận</span><strong>${safe(t.receiver)}</strong></div><div><span>Số tài khoản</span><strong>${safe(t.account)}</strong></div><div><span>Số tiền</span><strong>${money(t.amount)} VND</strong></div><div><span>Nội dung</span><strong>${safe(t.memo)}</strong></div>`} $('form').addEventListener('submit',e=>{e.preventDefault();const f=$('form');if(!f.reportValidity())return;const amount=Number($('money').value);if(!Number.isSafeInteger(amount)||amount<1000||amount>balance){$('formError').textContent='Số tiền phải từ 1.000 VND đến số dư hiện tại.';return}$('formError').textContent='';transaction={bank:$('bank').value.trim(),account:$('account').value.trim(),receiver:$('receiver').value.trim(),amount,memo:$('memo').value.trim()};$('verifySummary').innerHTML=detail(transaction);$('camMsg').textContent='Nhấn “Bật camera” để bắt đầu';$('camError').textContent='';$('startCam').classList.remove('hidden');$('scanBtn').classList.add('hidden');page('verify')});$('startCam').addEventListener('click',async()=>{if(!navigator.mediaDevices?.getUserMedia){$('camError').textContent='Trình duyệt không hỗ trợ camera trong ngữ cảnh này. Hãy thử localhost hoặc HTTPS.';return}try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});$('video').srcObject=stream;await $('video').play();$('camMsg').textContent='Camera đã bật — sẵn sàng quét';$('startCam').classList.add('hidden');$('scanBtn').classList.remove('hidden');$('camError').textContent=''}catch(err){$('camError').textContent='Không mở được camera. Kiểm tra quyền truy cập camera của trình duyệt.'}});$('scanBtn').addEventListener('click',async()=>{if(busy||!stream||!transaction)return;busy=true;$('scanBtn').disabled=true;$('backBtn').disabled=true;$('cameraBox').classList.add('scanning');$('camMsg').textContent='Đang quét ...';await new Promise(r=>setTimeout(r,2600));if(!stream){busy=false;return}balance-=transaction.amount;updateBalance();$('doneAmount').textContent=money(transaction.amount);$('doneSummary').innerHTML=detail(transaction)+`<div><span>Thời gian</span><strong>${new Date().toLocaleString('vi-VN')}</strong></div><div><span>Số dư còn lại</span><strong>${money(balance)} VND</strong></div><div><span>Trạng thái</span><strong>Thành công</strong></div>`;stopCam();$('scanBtn').disabled=false;$('backBtn').disabled=false;busy=false;page('done')});$('backBtn').addEventListener('click',()=>{if(busy)return;stopCam();page('transfer')});$('again').addEventListener('click',()=>{transaction=null;$('form').reset();$('bank').value='Ngân hàng MMISBank';$('memo').value='MMIS chuyen khoan';page('transfer')});$('reset').addEventListener('click',()=>{balance=INITIAL;updateBalance();$('again').click()});window.addEventListener('pagehide',stopCam);updateBalance()})();
-</script></body></html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MMISBank</title>
+    <style>
+      :root {
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        color: #14243b;
+        background: #eef3f9;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+      }
+      .shell {
+        max-width: 470px;
+        margin: 24px auto;
+        background: #fff;
+        min-height: 780px;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 16px 55px #18344e20;
+      }
+      .head {
+        background: linear-gradient(135deg, #084e9e, #077cc4);
+        color: #fff;
+        padding: 24px 24px 32px;
+      }
+      .headtop {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .brand {
+        font-weight: 800;
+        font-size: 21px;
+        letter-spacing: -0.5px;
+      }
+      .demo {
+        font-size: 11px;
+        background: #ffffff30;
+        border: 1px solid #ffffff66;
+        padding: 5px 9px;
+        border-radius: 30px;
+      }
+      .sub {
+        opacity: 0.83;
+        font-size: 13px;
+        margin-top: 25px;
+      }
+      .balance {
+        font-size: 30px;
+        font-weight: 800;
+        margin-top: 5px;
+      }
+      .balance small {
+        font-size: 16px;
+      }
+      .content {
+        padding: 24px;
+      }
+      .step {
+        display: none;
+      }
+      .step.active {
+        display: block;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 0 0 6px;
+      }
+      p.muted {
+        font-size: 13px;
+        color: #72829a;
+        margin: 0 0 22px;
+        line-height: 1.5;
+      }
+      label {
+        font-size: 13px;
+        font-weight: 650;
+        display: block;
+        margin: 17px 0 7px;
+      }
+      input {
+        border: 1px solid #d9e3ef;
+        background: #f9fbfe;
+        border-radius: 12px;
+        padding: 14px 15px;
+        font: inherit;
+        width: 100%;
+        outline: none;
+      }
+      input:focus {
+        border-color: #0b74ce;
+        box-shadow: 0 0 0 3px #0b74ce16;
+      }
+      .btn {
+        background: #076bc4;
+        color: white;
+        border: 0;
+        border-radius: 13px;
+        width: 100%;
+        padding: 15px;
+        font: inherit;
+        font-weight: 750;
+        cursor: pointer;
+        margin-top: 24px;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .btn.secondary {
+        background: #edf4fb;
+        color: #1262a7;
+        margin-top: 10px;
+      }
+      .hint {
+        font-size: 12px;
+        color: #77879d;
+        text-align: center;
+        margin-top: 14px;
+        line-height: 1.5;
+      }
+      .error {
+        color: #b72734;
+        font-size: 12px;
+        margin-top: 8px;
+        min-height: 16px;
+      }
+      .progress {
+        display: flex;
+        gap: 7px;
+        margin: 0 0 24px;
+      }
+      .progress span {
+        height: 5px;
+        background: #e6eef7;
+        border-radius: 8px;
+        flex: 1;
+      }
+      .progress span.on {
+        background: #0b7dd5;
+      }
+      .summary {
+        background: #f4f8fc;
+        border: 1px solid #e1eaf4;
+        border-radius: 14px;
+        padding: 16px;
+        margin: 18px 0;
+      }
+      .summary div {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 7px 0;
+        font-size: 13px;
+      }
+      .summary div strong {
+        max-width: 58%;
+        text-align: right;
+        overflow-wrap: anywhere;
+      }
+      .camera {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4/4.4;
+        background: #122b43;
+        border-radius: 18px;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        color: #b7d1e8;
+      }
+      .camera video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scaleX(-1);
+      }
+      .oval {
+        position: absolute;
+        width: 65%;
+        height: 73%;
+        border: 3px dashed #b4f7ff;
+        border-radius: 50%;
+        pointer-events: none;
+        box-shadow: 0 0 0 100px #00162d48;
+      }
+      .scanline {
+        position: absolute;
+        width: 60%;
+        height: 3px;
+        background: #51efff;
+        box-shadow: 0 0 15px #6df2ff;
+        animation: scan 2s infinite alternate;
+        display: none;
+      }
+      .camera.scanning .scanline {
+        display: block;
+      }
+      @keyframes scan {
+        from {
+          transform: translateY(-105px);
+        }
+        to {
+          transform: translateY(105px);
+        }
+      }
+      .cammsg {
+        position: absolute;
+        bottom: 14px;
+        left: 10px;
+        right: 10px;
+        text-align: center;
+        font-size: 12px;
+        background: #071b2bbb;
+        border-radius: 20px;
+        padding: 9px;
+      }
+      .success {
+        text-align: center;
+        padding: 28px 0;
+      }
+      .check {
+        display: grid;
+        place-items: center;
+        margin: 0 auto 19px;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: #e5f8ec;
+        color: #149d54;
+        font-size: 50px;
+        font-weight: 800;
+      }
+      .amount {
+        font-size: 32px;
+        font-weight: 800;
+        margin: 18px 0 4px;
+      }
+      .note {
+        background: #fff7e7;
+        border: 1px solid #ffe0a3;
+        border-radius: 12px;
+        padding: 12px;
+        font-size: 12px;
+        color: #7c5b1e;
+        line-height: 1.5;
+        margin-top: 20px;
+      }
+      .footer {
+        text-align: center;
+        color: #9ca9b8;
+        font-size: 11px;
+        padding: 16px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      @media (max-width: 520px) {
+        .shell {
+          margin: 0;
+          min-height: 100vh;
+          border-radius: 0;
+        }
+        .head {
+          padding: 23px;
+        }
+        .content {
+          padding: 23px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .scanline {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="head">
+        <div class="headtop"><div class="brand">◈ MMISBank</div></div>
+        <div class="sub">Số dư tài khoản</div>
+        <div class="balance" id="balance">25.000.000 <small>VND</small></div>
+      </header>
+      <div class="content">
+        <section class="step active" id="transfer">
+          <div class="progress">
+            <span class="on"></span><span></span><span></span>
+          </div>
+          <h1>Thông tin chuyển khoản</h1>
+          <form id="form">
+            <label for="bank">Ngân hàng thụ hưởng</label
+            ><input
+              id="bank"
+              value="Ngân hàng MMISBank"
+              required
+              maxlength="80"
+            /><label for="account">Số tài khoản nhận</label
+            ><input
+              id="account"
+              inputmode="numeric"
+              pattern="[0-9]{6,20}"
+              placeholder="Nhập 6–20 chữ số"
+              required
+            /><label for="receiver">Tên người nhận</label
+            ><input
+              id="receiver"
+              placeholder="Nguyễn Văn A"
+              maxlength="100"
+              required
+            /><label for="money">Số tiền (VND)</label
+            ><input
+              id="money"
+              type="number"
+              min="1000"
+              max="1300000000"
+              step="1000"
+              placeholder="Ví dụ: 500000"
+              required
+            /><label for="memo">Nội dung chuyển khoản</label
+            ><input id="memo" value="MMIS chuyen khoan" maxlength="140" />
+            <div class="error" id="formError" role="alert"></div>
+            <button class="btn" type="submit">Thanh toán</button>
+          </form>
+        </section>
+        <section class="step" id="verify">
+          <div class="progress">
+            <span class="on"></span><span class="on"></span><span></span>
+          </div>
+          <h1>Xác thực khuôn mặt</h1>
+          <p class="muted">Đặt khuôn mặt vào khung camera.</p>
+          <div class="summary" id="verifySummary"></div>
+          <div class="camera" id="cameraBox">
+            <video id="video" autoplay muted playsinline></video>
+            <div class="oval"></div>
+            <div class="scanline"></div>
+            <div class="cammsg" id="camMsg">Nhấn “Bật camera” để bắt đầu</div>
+          </div>
+          <div class="error" id="camError" role="alert"></div>
+          <button class="btn" id="startCam">Bật camera</button
+          ><button class="btn hidden" id="scanBtn">Bắt đầu quét</button
+          ><button class="btn secondary" id="backBtn">Quay lại</button>
+        </section>
+        <section class="step" id="done">
+          <div class="progress">
+            <span class="on"></span><span class="on"></span
+            ><span class="on"></span>
+          </div>
+          <div class="success">
+            <div class="check">✓</div>
+            <h1>Chuyển khoản thành công!</h1>
+            <p class="muted">Giao dịch hoàn tất.</p>
+            <div class="amount" id="doneAmount"></div>
+            <p class="muted">VND</p>
+          </div>
+          <div class="summary" id="doneSummary"></div>
+          <button class="btn" id="again">Thực hiện giao dịch khác</button
+          ><button class="btn secondary" id="reset">Đặt lại số dư</button>
+        </section>
+      </div>
+      <div class="footer">MMISBank · OriginDev</div>
+    </main>
+    <script>
+      (() => {
+        "use strict";
+
+        const INITIAL = 1300000000;
+        let balance = INITIAL,
+          stream = null,
+          transaction = null,
+          busy = false,
+          openingCamera = false;
+        const $ = (id) => document.getElementById(id);
+        const money = (n) => new Intl.NumberFormat("vi-VN").format(n);
+        const safe = (s) =>
+          String(s).replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;",
+              })[c],
+          );
+
+        function updateBalance() {
+          $("balance").innerHTML = money(balance) + " <small>VND</small>";
+        }
+
+        function page(id) {
+          document
+            .querySelectorAll(".step")
+            .forEach((s) => s.classList.toggle("active", s.id === id));
+        }
+
+        function stopCam() {
+          if (stream) {
+            stream.getTracks().forEach((t) => t.stop());
+            stream = null;
+          }
+          $("video").srcObject = null;
+          $("cameraBox").classList.remove("scanning");
+        }
+
+        function detail(t) {
+          return `<div><span>Ngân hàng</span><strong>${safe(t.bank)}</strong></div><div><span>Người nhận</span><strong>${safe(t.receiver)}</strong></div><div><span>Số tài khoản</span><strong>${safe(t.account)}</strong></div><div><span>Số tiền</span><strong>${money(t.amount)} VND</strong></div><div><span>Nội dung</span><strong>${safe(t.memo)}</strong></div>`;
+        }
+
+        async function scanFace() {
+          if (busy || !stream || !transaction) return;
+          busy = true;
+          $("scanBtn").disabled = true;
+          $("backBtn").disabled = true;
+          $("cameraBox").classList.add("scanning");
+          $("camMsg").textContent = "Đang quét ...";
+
+          await new Promise((r) => setTimeout(r, 2600));
+          if (!stream) {
+            busy = false;
+            return;
+          }
+
+          balance -= transaction.amount;
+          updateBalance();
+          $("doneAmount").textContent = money(transaction.amount);
+          $("doneSummary").innerHTML =
+            detail(transaction) +
+            `<div><span>Thời gian</span><strong>${new Date().toLocaleString("vi-VN")}</strong></div><div><span>Số dư còn lại</span><strong>${money(balance)} VND</strong></div><div><span>Trạng thái</span><strong>Thành công</strong></div>`;
+          stopCam();
+          $("scanBtn").disabled = false;
+          $("backBtn").disabled = false;
+          busy = false;
+          page("done");
+        }
+
+        async function openCameraAndScan() {
+          if (openingCamera || busy) return;
+
+          if (!navigator.mediaDevices?.getUserMedia) {
+            $("camError").textContent =
+              "Trình duyệt không hỗ trợ camera trong ngữ cảnh này. Hãy thử localhost hoặc HTTPS.";
+            $("startCam").textContent = "Thử lại camera";
+            $("startCam").classList.remove("hidden");
+            return;
+          }
+
+          openingCamera = true;
+          $("startCam").disabled = true;
+          $("backBtn").disabled = true;
+          $("camMsg").textContent = "Đang bật camera và chuẩn bị quét...";
+
+          try {
+            const requestedStream = await navigator.mediaDevices.getUserMedia({
+              video: { facingMode: "user" },
+              audio: false,
+            });
+
+            if (!$("verify").classList.contains("active") || !transaction) {
+              requestedStream.getTracks().forEach((t) => t.stop());
+              return;
+            }
+
+            stream = requestedStream;
+            $("video").srcObject = stream;
+            await $("video").play();
+            $("camMsg").textContent = "Camera đã bật — đang bắt đầu quét";
+            $("camError").textContent = "";
+            $("startCam").classList.add("hidden");
+            $("scanBtn").classList.add("hidden");
+            openingCamera = false;
+            $("startCam").disabled = false;
+            $("backBtn").disabled = false;
+            await scanFace();
+          } catch (err) {
+            stopCam();
+            $("camMsg").textContent = "Chưa thể bật camera tự động";
+            $("camError").textContent =
+              "Không mở được camera. Kiểm tra quyền truy cập camera của trình duyệt.";
+            $("startCam").textContent = "Thử lại camera";
+            $("startCam").classList.remove("hidden");
+          } finally {
+            openingCamera = false;
+            $("startCam").disabled = false;
+            if (!busy) $("backBtn").disabled = false;
+          }
+        }
+
+        $("form").addEventListener("submit", (e) => {
+          e.preventDefault();
+          const f = $("form");
+          if (!f.reportValidity()) return;
+
+          const amount = Number($("money").value);
+          if (
+            !Number.isSafeInteger(amount) ||
+            amount < 1000 ||
+            amount > balance
+          ) {
+            $("formError").textContent =
+              "Số tiền phải từ 1.000 VND đến số dư hiện tại.";
+            return;
+          }
+
+          $("formError").textContent = "";
+          transaction = {
+            bank: $("bank").value.trim(),
+            account: $("account").value.trim(),
+            receiver: $("receiver").value.trim(),
+            amount,
+            memo: $("memo").value.trim(),
+          };
+          $("verifySummary").innerHTML = detail(transaction);
+          $("camMsg").textContent = "Đang bật camera và chuẩn bị quét...";
+          $("camError").textContent = "";
+          $("startCam").textContent = "Bật camera";
+          $("startCam").classList.add("hidden");
+          $("scanBtn").classList.add("hidden");
+          page("verify");
+          void openCameraAndScan();
+        });
+
+        $("startCam").addEventListener("click", openCameraAndScan);
+        $("scanBtn").addEventListener("click", scanFace);
+
+        $("backBtn").addEventListener("click", () => {
+          if (busy || openingCamera) return;
+          stopCam();
+          page("transfer");
+        });
+
+        $("again").addEventListener("click", () => {
+          transaction = null;
+          $("form").reset();
+          $("bank").value = "Ngân hàng MMISBank";
+          $("memo").value = "MMIS chuyen khoan";
+          page("transfer");
+        });
+
+        $("reset").addEventListener("click", () => {
+          balance = INITIAL;
+          updateBalance();
+          $("again").click();
+        });
+
+        window.addEventListener("pagehide", stopCam);
+        updateBalance();
+      })();
+    </script>
+  </body>
+</html>
