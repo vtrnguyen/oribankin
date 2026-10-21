@@ -4,374 +4,2773 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>MMISBank</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         font-family:
-          Inter,
-          system-ui,
-          -apple-system,
-          "Segoe UI",
-          sans-serif;
-        color: #14243b;
-        background: #eef3f9;
+          "Nunito", "Arial Rounded MT Bold", ui-rounded, system-ui, sans-serif;
+        color: #10233f;
+        background: #dfe8f2;
+        font-synthesis: none;
+        --navy: #062b55;
+        --blue: #075fbe;
+        --cyan: #16c7d9;
+        --ink: #10233f;
+        --muted: #6d7f96;
+        --line: #e3eaf2;
+        --surface: #ffffff;
+        --canvas: #f3f6fa;
+        --success: #0f9f6e;
       }
+
       * {
         box-sizing: border-box;
       }
+
+      html {
+        min-height: 100%;
+        background:
+          radial-gradient(circle at 12% 15%, #ffffff 0 2%, transparent 28%),
+          linear-gradient(145deg, #d9e8f4, #eef4f8 50%, #dce7f0);
+      }
+
       body {
         margin: 0;
         min-height: 100vh;
-      }
-      .shell {
-        max-width: 470px;
-        margin: 24px auto;
-        background: #fff;
-        min-height: 780px;
-        border-radius: 24px;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
         overflow: hidden;
-        box-shadow: 0 16px 55px #18344e20;
+        -webkit-font-smoothing: antialiased;
       }
-      .head {
-        background: linear-gradient(135deg, #084e9e, #077cc4);
-        color: #fff;
-        padding: 24px 24px 32px;
+
+      button,
+      input {
+        font: inherit;
       }
-      .headtop {
+
+      button {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .shell {
+        position: relative;
         display: flex;
+        width: 100%;
+        min-width: 0;
+        max-width: 430px;
+        height: min(900px, 100vh);
+        height: min(900px, 100dvh);
+        margin: 24px auto;
+        overflow: hidden;
+        background: var(--canvas);
+        border: 1px solid #ffffffb8;
+        border-radius: 34px;
+        box-shadow:
+          0 30px 80px #19324d2e,
+          0 6px 22px #0f28401c;
+      }
+
+      .app-header {
+        position: relative;
+        z-index: 1;
+        min-width: 0;
+        overflow: hidden;
+        color: #fff;
+        background:
+          radial-gradient(circle at 100% 0%, #19c4d55c 0 18%, transparent 40%),
+          linear-gradient(145deg, #052a55 0%, #075baa 72%, #0876c8 100%);
+      }
+
+      .app-header::after {
+        position: absolute;
+        right: -76px;
+        bottom: -105px;
+        width: 230px;
+        height: 230px;
+        content: "";
+        border: 1px solid #ffffff24;
+        border-radius: 50%;
+      }
+
+      .status-bar {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
         justify-content: space-between;
+        height: 34px;
+        padding: 8px 22px 0;
+        font-size: 12px;
+        font-weight: 750;
+        letter-spacing: 0.15px;
+      }
+
+      .status-icons {
+        display: flex;
+        gap: 6px;
         align-items: center;
       }
+
+      .signal-bars {
+        display: flex;
+        gap: 2px;
+        align-items: end;
+        height: 11px;
+      }
+
+      .signal-bars i {
+        display: block;
+        width: 3px;
+        background: currentColor;
+        border-radius: 3px;
+      }
+
+      .signal-bars i:nth-child(1) {
+        height: 4px;
+      }
+
+      .signal-bars i:nth-child(2) {
+        height: 6px;
+      }
+
+      .signal-bars i:nth-child(3) {
+        height: 8px;
+      }
+
+      .signal-bars i:nth-child(4) {
+        height: 10px;
+      }
+
+      .battery {
+        position: relative;
+        width: 20px;
+        height: 10px;
+        border: 1.5px solid currentColor;
+        border-radius: 3px;
+      }
+
+      .battery::before {
+        position: absolute;
+        inset: 2px;
+        content: "";
+        background: currentColor;
+        border-radius: 1px;
+      }
+
+      .battery::after {
+        position: absolute;
+        top: 2px;
+        right: -3px;
+        width: 2px;
+        height: 4px;
+        content: "";
+        background: currentColor;
+        border-radius: 0 2px 2px 0;
+      }
+
+      .topbar {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 20px 16px;
+      }
+
       .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 17px;
         font-weight: 800;
-        font-size: 21px;
-        letter-spacing: -0.5px;
+        letter-spacing: -0.3px;
       }
-      .demo {
-        font-size: 11px;
-        background: #ffffff30;
-        border: 1px solid #ffffff66;
-        padding: 5px 9px;
-        border-radius: 30px;
+
+      .brand-mark {
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        color: var(--navy);
+        font-size: 18px;
+        font-weight: 900;
+        background: linear-gradient(145deg, #fff, #c8f8ff);
+        border-radius: 11px;
+        box-shadow: 0 5px 16px #00152f38;
       }
-      .sub {
-        opacity: 0.83;
-        font-size: 13px;
-        margin-top: 25px;
+
+      .top-actions {
+        display: flex;
+        gap: 9px;
       }
-      .balance {
-        font-size: 30px;
-        font-weight: 800;
+
+      .icon-button {
+        position: relative;
+        display: grid;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        place-items: center;
+        color: #fff;
+        background: #ffffff18;
+        border: 1px solid #ffffff2e;
+        border-radius: 50%;
+      }
+
+      .icon-button svg {
+        width: 19px;
+        height: 19px;
+      }
+
+      .notification-dot {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        width: 8px;
+        height: 8px;
+        background: #ffcc4d;
+        border: 2px solid #07519b;
+        border-radius: 50%;
+      }
+
+      .wallet-overview {
+        position: relative;
+        z-index: 2;
+        min-width: 0;
+        padding: 0 18px 20px;
+      }
+
+      .balance-card {
+        position: relative;
+        min-width: 0;
+        overflow: hidden;
+        padding: 18px;
+        background: linear-gradient(120deg, #ffffff 0%, #f2fbff 100%);
+        border: 1px solid #ffffff;
+        border-radius: 22px;
+        box-shadow: 0 14px 35px #001b3e26;
+      }
+
+      .balance-card::after {
+        position: absolute;
+        top: -45px;
+        right: -30px;
+        width: 130px;
+        height: 130px;
+        content: "";
+        background: #12c2d50f;
+        border: 18px solid #12c2d50c;
+        border-radius: 50%;
+      }
+
+      .balance-label,
+      .account-number {
+        position: relative;
+        z-index: 1;
+        color: #6d8097;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .balance-row {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        gap: 9px;
+        align-items: center;
         margin-top: 5px;
       }
+
+      .balance {
+        color: var(--ink);
+        font-size: clamp(26px, 7vw, 31px);
+        font-weight: 820;
+        letter-spacing: -1.2px;
+      }
+
       .balance small {
-        font-size: 16px;
+        color: #63758d;
+        font-size: 12px;
+        font-weight: 750;
+        letter-spacing: 0;
       }
+
+      .eye {
+        display: grid;
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        place-items: center;
+        color: #718398;
+        background: transparent;
+        border: 0;
+      }
+
+      .eye svg {
+        width: 18px;
+      }
+
+      .account-number {
+        margin-top: 7px;
+        letter-spacing: 0.8px;
+      }
+
+      .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 17px;
+        padding-top: 15px;
+        border-top: 1px solid #e3ebf3;
+      }
+
+      .quick-action {
+        display: flex;
+        min-width: 0;
+        gap: 6px;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        color: #204463;
+        font-size: 11px;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .quick-icon {
+        display: grid;
+        width: 29px;
+        height: 29px;
+        place-items: center;
+        color: #0871bd;
+        background: #e4f5fb;
+        border-radius: 9px;
+      }
+
+      .quick-icon svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      .app-body {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex: 1;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
       .content {
-        padding: 24px;
+        flex: 1;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        padding: 22px 18px 112px;
+        overflow-y: auto;
+        scrollbar-width: none;
       }
-      .step {
+
+      .content::-webkit-scrollbar {
         display: none;
       }
+
+      .step {
+        display: none;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        animation: screen-in 280ms ease both;
+      }
+
       .step.active {
         display: block;
       }
-      h1 {
-        font-size: 22px;
-        margin: 0 0 6px;
-      }
-      p.muted {
-        font-size: 13px;
-        color: #72829a;
-        margin: 0 0 22px;
-        line-height: 1.5;
-      }
-      label {
-        font-size: 13px;
-        font-weight: 650;
-        display: block;
-        margin: 17px 0 7px;
-      }
-      input {
-        border: 1px solid #d9e3ef;
-        background: #f9fbfe;
-        border-radius: 12px;
-        padding: 14px 15px;
-        font: inherit;
+
+      form {
         width: 100%;
-        outline: none;
+        min-width: 0;
+        max-width: 100%;
       }
-      input:focus {
-        border-color: #0b74ce;
-        box-shadow: 0 0 0 3px #0b74ce16;
+
+      @keyframes screen-in {
+        from {
+          opacity: 0;
+          transform: translateY(7px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
-      .btn {
-        background: #076bc4;
-        color: white;
-        border: 0;
-        border-radius: 13px;
-        width: 100%;
-        padding: 15px;
-        font: inherit;
-        font-weight: 750;
-        cursor: pointer;
-        margin-top: 24px;
-      }
-      .btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-      .btn.secondary {
-        background: #edf4fb;
-        color: #1262a7;
-        margin-top: 10px;
-      }
-      .hint {
-        font-size: 12px;
-        color: #77879d;
-        text-align: center;
-        margin-top: 14px;
-        line-height: 1.5;
-      }
-      .error {
-        color: #b72734;
-        font-size: 12px;
-        margin-top: 8px;
-        min-height: 16px;
-      }
-      .progress {
+
+      .screen-heading {
         display: flex;
-        gap: 7px;
-        margin: 0 0 24px;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 17px;
       }
-      .progress span {
-        height: 5px;
-        background: #e6eef7;
-        border-radius: 8px;
-        flex: 1;
+
+      .eyebrow {
+        margin: 0 0 4px;
+        color: #1685be;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1.1px;
+        text-transform: uppercase;
       }
-      .progress span.on {
-        background: #0b7dd5;
+
+      h1 {
+        margin: 0;
+        color: var(--ink);
+        font-size: 23px;
+        font-weight: 820;
+        letter-spacing: -0.55px;
       }
+
+      p.muted {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .form-card {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        margin-bottom: 13px;
+        padding: 5px 16px 16px;
+        background: var(--surface);
+        border: 1px solid #e8edf3;
+        border-radius: 20px;
+        box-shadow: 0 5px 18px #1a3b5910;
+      }
+
+      .section-title {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: 14px 0 2px;
+        color: #1a3855;
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .section-title svg {
+        width: 17px;
+        color: #0b7ac2;
+      }
+
+      .field {
+        margin-top: 14px;
+      }
+
+      label {
+        display: block;
+        margin: 0 0 7px;
+        color: #60738b;
+        font-size: 11px;
+        font-weight: 720;
+        letter-spacing: 0.2px;
+      }
+
+      .input-box {
+        position: relative;
+        display: flex;
+        min-width: 0;
+        max-width: 100%;
+        align-items: center;
+      }
+
+      .field-icon {
+        position: absolute;
+        left: 13px;
+        z-index: 1;
+        display: grid;
+        width: 30px;
+        height: 30px;
+        place-items: center;
+        color: #0873bc;
+        background: #eaf6fb;
+        border-radius: 9px;
+        pointer-events: none;
+      }
+
+      .field-icon svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      input {
+        width: 100%;
+        height: 51px;
+        padding: 0 14px 0 53px;
+        color: #162d47;
+        font-size: 14px;
+        font-weight: 620;
+        outline: none;
+        background: #f7f9fc;
+        border: 1px solid #dfe7ef;
+        border-radius: 13px;
+        transition:
+          border-color 160ms ease,
+          box-shadow 160ms ease,
+          background 160ms ease;
+      }
+
+      input::placeholder {
+        color: #a0adbb;
+        font-weight: 450;
+      }
+
+      input:focus {
+        background: #fff;
+        border-color: #1489c8;
+        box-shadow: 0 0 0 4px #0b8ac814;
+      }
+
+      .amount-input input {
+        height: 58px;
+        color: #073b70;
+        font-size: 20px;
+        font-weight: 820;
+      }
+
+      .input-suffix {
+        position: absolute;
+        right: 14px;
+        color: #61758b;
+        font-size: 11px;
+        font-weight: 800;
+        pointer-events: none;
+      }
+
+      .amount-input input {
+        padding-right: 55px;
+      }
+
+      .error {
+        min-height: 16px;
+        margin-top: 8px;
+        color: #c43b46;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .secure-note {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        margin: 15px 0 2px;
+        color: #78899b;
+        font-size: 11px;
+      }
+
+      .secure-note svg {
+        width: 15px;
+        height: 15px;
+        color: var(--success);
+      }
+
+      .btn {
+        display: flex;
+        width: 100%;
+        min-height: 54px;
+        gap: 9px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8px;
+        padding: 14px 18px;
+        color: white;
+        font-weight: 780;
+        cursor: pointer;
+        background: linear-gradient(100deg, #075caf, #0788c6);
+        border: 0;
+        border-radius: 15px;
+        box-shadow: 0 9px 22px #076bb52e;
+        transition:
+          transform 130ms ease,
+          box-shadow 130ms ease;
+      }
+
+      .btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .btn:hover {
+        box-shadow: 0 12px 26px #076bb543;
+        transform: translateY(-1px);
+      }
+
+      .btn:active {
+        box-shadow: 0 5px 13px #076bb52b;
+        transform: translateY(1px);
+      }
+
+      .btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        transform: none;
+      }
+
+      .btn.secondary {
+        margin-top: 10px;
+        color: #17629f;
+        background: #e8f1f8;
+        box-shadow: none;
+      }
+
       .summary {
-        background: #f4f8fc;
-        border: 1px solid #e1eaf4;
-        border-radius: 14px;
-        padding: 16px;
-        margin: 18px 0;
+        padding: 7px 15px;
+        margin: 14px 0;
+        background: #fff;
+        border: 1px solid #e3eaf1;
+        border-radius: 18px;
+        box-shadow: 0 5px 18px #1a3b590c;
       }
+
       .summary div {
         display: flex;
+        min-height: 42px;
+        gap: 14px;
+        align-items: center;
         justify-content: space-between;
-        gap: 10px;
-        padding: 7px 0;
-        font-size: 13px;
+        padding: 9px 0;
+        color: #6e8095;
+        font-size: 12px;
+        border-bottom: 1px dashed #e5eaf0;
       }
+
+      .summary div:last-child {
+        border-bottom: 0;
+      }
+
       .summary div strong {
-        max-width: 58%;
+        max-width: 62%;
+        color: #18334f;
+        font-size: 12px;
         text-align: right;
         overflow-wrap: anywhere;
       }
+
+      .verify-intro {
+        margin-bottom: 12px;
+        text-align: center;
+      }
+
+      .verify-symbol {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        margin: 0 auto 9px;
+        place-items: center;
+        color: #0872bc;
+        background: #e6f4fa;
+        border-radius: 13px;
+      }
+
+      .verify-symbol svg {
+        width: 23px;
+      }
+
       .camera {
         position: relative;
-        width: 100%;
-        aspect-ratio: 4/4.4;
-        background: #122b43;
-        border-radius: 18px;
-        overflow: hidden;
         display: grid;
+        width: 100%;
+        max-height: 420px;
+        aspect-ratio: 4 / 4.55;
         place-items: center;
-        color: #b7d1e8;
+        overflow: hidden;
+        color: #c1d9e7;
+        background:
+          radial-gradient(circle at 50% 38%, #1c5270, #0a263e 72%), #0a263e;
+        border: 4px solid #fff;
+        border-radius: 26px;
+        box-shadow:
+          0 10px 35px #092b4430,
+          0 0 0 1px #dae5ee;
       }
+
       .camera video {
         width: 100%;
         height: 100%;
         object-fit: cover;
         transform: scaleX(-1);
       }
+
       .oval {
         position: absolute;
-        width: 65%;
-        height: 73%;
-        border: 3px dashed #b4f7ff;
-        border-radius: 50%;
+        width: 61%;
+        height: 67%;
         pointer-events: none;
-        box-shadow: 0 0 0 100px #00162d48;
+        border: 2px solid #9ceff5;
+        border-radius: 48% 48% 46% 46%;
+        box-shadow:
+          0 0 0 100px #031c316e,
+          0 0 22px #43e4ee45;
       }
+
+      .oval::before,
+      .oval::after {
+        position: absolute;
+        left: 50%;
+        width: 54px;
+        height: 3px;
+        content: "";
+        background: #78edf4;
+        border-radius: 5px;
+        transform: translateX(-50%);
+      }
+
+      .oval::before {
+        top: -3px;
+      }
+
+      .oval::after {
+        bottom: -3px;
+      }
+
       .scanline {
         position: absolute;
-        width: 60%;
-        height: 3px;
-        background: #51efff;
-        box-shadow: 0 0 15px #6df2ff;
-        animation: scan 2s infinite alternate;
         display: none;
+        width: 58%;
+        height: 2px;
+        background: #70f3fa;
+        border-radius: 3px;
+        box-shadow: 0 0 17px #6df2ff;
+        animation: scan 1.8s ease-in-out infinite alternate;
       }
+
       .camera.scanning .scanline {
         display: block;
       }
+
       @keyframes scan {
         from {
-          transform: translateY(-105px);
+          transform: translateY(-110px);
         }
+
         to {
-          transform: translateY(105px);
+          transform: translateY(110px);
         }
       }
+
       .cammsg {
         position: absolute;
-        bottom: 14px;
-        left: 10px;
-        right: 10px;
+        right: 18px;
+        bottom: 16px;
+        left: 18px;
+        padding: 10px 13px;
+        color: #e9fbff;
+        font-size: 11px;
+        font-weight: 650;
         text-align: center;
-        font-size: 12px;
-        background: #071b2bbb;
-        border-radius: 20px;
-        padding: 9px;
+        background: #04192fc4;
+        border: 1px solid #ffffff1f;
+        border-radius: 999px;
+        backdrop-filter: blur(8px);
       }
+
       .success {
+        padding: 9px 0 3px;
         text-align: center;
-        padding: 28px 0;
       }
+
+      .check-wrap {
+        position: relative;
+        display: grid;
+        width: 96px;
+        height: 96px;
+        margin: 2px auto 19px;
+        place-items: center;
+        background: #dcf7ed;
+        border: 9px solid #f0fbf7;
+        border-radius: 50%;
+        box-shadow: 0 8px 26px #0e9c6724;
+      }
+
       .check {
         display: grid;
+        width: 52px;
+        height: 52px;
         place-items: center;
-        margin: 0 auto 19px;
-        width: 90px;
-        height: 90px;
+        color: white;
+        font-size: 28px;
+        font-weight: 900;
+        background: linear-gradient(145deg, #11ae7a, #0b8f63);
         border-radius: 50%;
-        background: #e5f8ec;
-        color: #149d54;
-        font-size: 50px;
-        font-weight: 800;
       }
+
+      .success-label {
+        display: inline-flex;
+        padding: 6px 10px;
+        margin-bottom: 8px;
+        color: #07805a;
+        font-size: 10px;
+        font-weight: 850;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        background: #e5f8f1;
+        border-radius: 999px;
+      }
+
       .amount {
-        font-size: 32px;
+        margin: 16px 0 2px;
+        color: #092d52;
+        font-size: 34px;
+        font-weight: 850;
+        letter-spacing: -1.2px;
+      }
+
+      .amount-currency {
+        margin-top: 0 !important;
+        color: #718196 !important;
+        font-size: 11px !important;
+        font-weight: 750;
+        letter-spacing: 1px;
+      }
+
+      .receipt-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 22px;
+        color: #1b3651;
+        font-size: 13px;
         font-weight: 800;
-        margin: 18px 0 4px;
       }
-      .note {
-        background: #fff7e7;
-        border: 1px solid #ffe0a3;
-        border-radius: 12px;
-        padding: 12px;
-        font-size: 12px;
-        color: #7c5b1e;
-        line-height: 1.5;
-        margin-top: 20px;
+
+      .receipt-title span {
+        color: #7990a4;
+        font-size: 10px;
+        font-weight: 650;
       }
-      .footer {
-        text-align: center;
-        color: #9ca9b8;
+
+      .bottom-nav {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 10;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        min-height: 78px;
+        padding: 9px 10px max(10px, env(safe-area-inset-bottom));
+        background: #ffffffeb;
+        border-top: 1px solid #e6ebf1;
+        box-shadow: 0 -8px 28px #233e5712;
+        backdrop-filter: blur(16px);
+      }
+
+      .nav-item {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        color: #8392a3;
+        font-size: 10px;
+        font-weight: 650;
+        text-decoration: none;
+      }
+
+      .nav-item svg {
+        width: 21px;
+        height: 21px;
+      }
+
+      .nav-item.active {
+        color: #0871bd;
+      }
+
+      .nav-item.active::before {
+        position: absolute;
+        top: 0;
+        width: 30px;
+        height: 3px;
+        content: "";
+        background: #0c83c8;
+        border-radius: 0 0 5px 5px;
+      }
+
+      .shell[data-page="verify"] .wallet-overview,
+      .shell[data-page="done"] .wallet-overview {
+        display: none;
+      }
+
+      .shell[data-page="verify"] .app-header,
+      .shell[data-page="done"] .app-header {
+        border-radius: 0 0 22px 22px;
+      }
+
+      .shell[data-page="verify"] .content,
+      .shell[data-page="done"] .content {
+        padding-top: 18px;
+      }
+
+      .shell[data-page="verify"] .bottom-nav {
+        display: none;
+      }
+
+      .shell[data-page="verify"] .content {
+        padding-bottom: 28px;
+      }
+
+      .shell[data-page="done"] .bottom-nav {
+        display: none;
+      }
+
+      .shell[data-page="done"] .content {
+        padding-bottom: 28px;
+      }
+
+      /* Home dashboard and focused transaction flow */
+      .shell:not([data-page="home"]) .app-header,
+      .shell:not([data-page="home"]) .bottom-nav {
+        display: none;
+      }
+
+      .shell[data-page="home"] .app-header {
+        flex: 0 0 auto;
+        background:
+          radial-gradient(circle at 92% 8%, #3bcfe02d 0 12%, transparent 36%),
+          linear-gradient(145deg, #092c5d 0%, #075ba9 68%, #0486bd 100%);
+        border-radius: 0 0 28px 28px;
+      }
+
+      .shell[data-page="home"] .topbar {
+        padding-bottom: 8px;
+      }
+
+      .shell[data-page="home"] .wallet-overview {
+        padding: 2px 22px 22px;
+      }
+
+      .shell[data-page="home"] .balance-card {
+        padding: 14px 0 0;
+        overflow: visible;
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .shell[data-page="home"] .balance-card::after,
+      .shell[data-page="home"] .quick-actions {
+        display: none;
+      }
+
+      .shell[data-page="home"] .balance-label,
+      .shell[data-page="home"] .account-number {
+        color: #d5e8f8;
+      }
+
+      .shell[data-page="home"] .balance {
+        color: #fff;
+        text-shadow: 0 2px 10px #001a3438;
+      }
+
+      .shell[data-page="home"] .balance small {
+        color: #cce3f4;
+      }
+
+      .shell[data-page="home"] .eye {
+        color: #d9edfa;
+      }
+
+      .shell[data-page="home"] .content {
+        padding: 12px 18px 86px;
+        overflow: hidden;
+      }
+
+      .home-dashboard {
+        margin-top: 0;
+      }
+
+      .service-card {
+        padding: 14px 10px 12px;
+        background: #fff;
+        border: 1px solid #e8edf3;
+        border-radius: 22px;
+        box-shadow: 0 12px 28px #15385917;
+      }
+
+      .home-section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 5px 12px;
+      }
+
+      .home-section-head h2 {
+        margin: 0;
+        color: #132e4c;
+        font-size: 16px;
+        font-weight: 820;
+        letter-spacing: -0.2px;
+      }
+
+      .home-section-head button {
+        padding: 4px;
+        color: #0875bb;
         font-size: 11px;
-        padding: 16px;
+        font-weight: 750;
+        background: transparent;
+        border: 0;
       }
+
+      .service-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        row-gap: 14px;
+      }
+
+      .service-item {
+        display: flex;
+        min-width: 0;
+        gap: 8px;
+        align-items: center;
+        flex-direction: column;
+        padding: 0 3px;
+        color: #344b64;
+        font-size: 10px;
+        font-weight: 680;
+        line-height: 1.25;
+        text-align: center;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+      }
+
+      .service-icon {
+        display: grid;
+        width: 43px;
+        height: 43px;
+        place-items: center;
+        color: #0877be;
+        background: linear-gradient(145deg, #e8f7fb, #eef4ff);
+        border-radius: 16px;
+        box-shadow: inset 0 0 0 1px #dcecf4;
+        transition:
+          transform 140ms ease,
+          box-shadow 140ms ease;
+      }
+
+      .service-item:active .service-icon {
+        transform: scale(0.94);
+      }
+
+      .service-icon svg {
+        width: 23px;
+        height: 23px;
+      }
+
+      .service-icon.gold {
+        color: #a56d03;
+        background: linear-gradient(145deg, #fff2d5, #fff8e9);
+        box-shadow: inset 0 0 0 1px #f6e4b8;
+      }
+
+      .service-icon.purple {
+        color: #7251bf;
+        background: linear-gradient(145deg, #f0eaff, #f7f3ff);
+        box-shadow: inset 0 0 0 1px #e7dcfb;
+      }
+
+      .service-icon.green {
+        color: #138c68;
+        background: linear-gradient(145deg, #e4f8f0, #effbf6);
+        box-shadow: inset 0 0 0 1px #d4eee5;
+      }
+
+      .home-subtitle {
+        margin: 16px 4px 9px;
+        color: #183450;
+        font-size: 16px;
+        font-weight: 820;
+      }
+
+      .promo-card {
+        position: relative;
+        min-height: 104px;
+        overflow: hidden;
+        padding: 15px 18px;
+        color: #fff;
+        background: linear-gradient(125deg, #163b76, #7354bc);
+        border-radius: 22px;
+        box-shadow: 0 12px 28px #362b7626;
+      }
+
+      .promo-card::after {
+        position: absolute;
+        top: -36px;
+        right: -26px;
+        width: 145px;
+        height: 145px;
+        content: "";
+        background: linear-gradient(145deg, #ffffff38, #ffffff08);
+        border: 1px solid #ffffff2f;
+        border-radius: 50%;
+      }
+
+      .promo-kicker {
+        margin-bottom: 7px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        opacity: 0.78;
+      }
+
+      .promo-card strong {
+        position: relative;
+        z-index: 1;
+        display: block;
+        max-width: 240px;
+        font-size: 16px;
+        line-height: 1.3;
+      }
+
+      .promo-card span {
+        display: block;
+        margin-top: 6px;
+        font-size: 11px;
+        opacity: 0.78;
+      }
+
+      .shell:not([data-page="home"]) .content {
+        padding: 0 18px 28px;
+        overflow: hidden;
+        background: #f5f7fa;
+      }
+
+      .shell[data-page="verify"] .content,
+      .shell[data-page="done"] .content {
+        padding-top: 22px;
+      }
+
+      .task-appbar {
+        position: sticky;
+        top: 0;
+        z-index: 8;
+        display: grid;
+        grid-template-columns: 42px 1fr 42px;
+        gap: 8px;
+        align-items: center;
+        min-height: 60px;
+        margin: 0 -18px 10px;
+        padding: 10px 18px 8px;
+        background: #ffffffed;
+        border-bottom: 1px solid #e7edf3;
+        backdrop-filter: blur(14px);
+      }
+
+      .task-appbar strong {
+        color: #142f4b;
+        font-size: 17px;
+        text-align: center;
+      }
+
+      .back-icon {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        place-items: center;
+        color: #1d3b58;
+        cursor: pointer;
+        background: #eef3f7;
+        border: 0;
+        border-radius: 12px;
+      }
+
+      .back-icon svg {
+        width: 19px;
+      }
+
+      .shell:not([data-page="home"]) .screen-heading {
+        margin-top: 4px;
+      }
+
+      .shell[data-page="transfer"] .screen-heading {
+        display: none;
+      }
+
+      .shell[data-page="transfer"] .form-card {
+        padding: 3px 14px 11px;
+        margin-bottom: 9px;
+        border-radius: 18px;
+      }
+
+      .shell[data-page="transfer"] .section-title {
+        padding-top: 9px;
+      }
+
+      .shell[data-page="transfer"] .field {
+        margin-top: 8px;
+      }
+
+      .shell[data-page="transfer"] label {
+        margin-bottom: 4px;
+      }
+
+      .shell[data-page="transfer"] input {
+        height: 43px;
+      }
+
+      .shell[data-page="transfer"] .amount-input input {
+        height: 47px;
+        font-size: 18px;
+      }
+
+      .shell[data-page="transfer"] .btn {
+        min-height: 48px;
+        margin-top: 3px;
+      }
+
+      .shell[data-page="transfer"] .secure-note {
+        margin-top: 8px;
+      }
+
+      .shell[data-page="transfer"] .error {
+        min-height: 12px;
+        margin-top: 3px;
+      }
+
+      .shell[data-page="verify"] .verify-intro {
+        margin-bottom: 10px;
+      }
+
+      .shell[data-page="verify"] .verify-symbol {
+        width: 38px;
+        height: 38px;
+        margin-bottom: 6px;
+      }
+
+      .shell[data-page="verify"] .camera {
+        height: min(400px, 52dvh);
+        aspect-ratio: auto;
+      }
+
+      .shell[data-page="done"] .success {
+        padding-top: 2px;
+      }
+
+      .shell[data-page="done"] .check-wrap {
+        width: 78px;
+        height: 78px;
+        margin-bottom: 10px;
+        border-width: 7px;
+      }
+
+      .shell[data-page="done"] .check {
+        width: 44px;
+        height: 44px;
+        font-size: 24px;
+      }
+
+      .shell[data-page="done"] .amount {
+        margin-top: 9px;
+        font-size: 29px;
+      }
+
+      .shell[data-page="done"] .receipt-title {
+        margin-top: 10px;
+      }
+
+      .shell[data-page="done"] .summary {
+        padding: 3px 13px;
+        margin: 8px 0;
+      }
+
+      .shell[data-page="done"] .summary div {
+        min-height: 29px;
+        padding: 4px 0;
+        font-size: 10px;
+      }
+
+      .shell[data-page="done"] .summary div strong {
+        font-size: 10px;
+      }
+
+      .shell[data-page="done"] .btn {
+        min-height: 46px;
+        padding: 11px 16px;
+      }
+
+      .bottom-nav {
+        grid-template-columns: repeat(5, 1fr);
+        min-height: 70px;
+        padding-right: 7px;
+        padding-left: 7px;
+      }
+
+      .nav-item {
+        position: relative;
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+      }
+
+      .nav-item.active::before {
+        display: none;
+      }
+
+      .qr-nav {
+        transform: translateY(-22px);
+      }
+
+      .qr-nav-button {
+        display: grid;
+        width: 58px;
+        height: 58px;
+        place-items: center;
+        color: #fff;
+        background: linear-gradient(145deg, #0574c5, #09a8c4);
+        border: 5px solid #f3f6fa;
+        border-radius: 50%;
+        box-shadow: 0 8px 20px #086ca744;
+      }
+
+      .qr-nav-button svg {
+        width: 25px;
+        height: 25px;
+      }
+
+      .qr-nav small {
+        margin-top: -1px;
+        color: #6f8297;
+        font-size: 9px;
+        font-weight: 700;
+      }
+
+      /* MB-inspired visual system */
+      .shell[data-page="home"] {
+        background: #f7f9fd;
+      }
+
+      .shell[data-page="home"] .app-header {
+        background:
+          radial-gradient(ellipse at 7% 24%, #9bd4ff70 0 20%, transparent 21%),
+          radial-gradient(
+            ellipse at 76% 105%,
+            #48a9ff55 0 29%,
+            transparent 30%
+          ),
+          linear-gradient(145deg, #0748bb 0%, #0864dc 54%, #058ade 100%);
+        border-radius: 0;
+      }
+
+      .shell[data-page="home"] .app-header::after {
+        right: -30px;
+        bottom: -108px;
+        width: 250px;
+        height: 250px;
+        border: 1px solid #b5e8ff45;
+      }
+
+      .shell[data-page="home"] .brand-mark {
+        color: #fff;
+        background: #f02f4b;
+        border-radius: 10px 3px 10px 3px;
+        box-shadow: 0 5px 16px #052b8033;
+      }
+
+      .shell[data-page="home"] .wallet-overview {
+        padding: 5px 18px 18px;
+      }
+
+      .shell[data-page="home"] .balance-card {
+        padding: 14px 15px 0;
+        overflow: hidden;
+        background: linear-gradient(120deg, #2035adcc, #285ed5c9);
+        border: 1px solid #a8d7ff5c;
+        border-radius: 22px;
+        box-shadow: 0 12px 30px #07327a38;
+        backdrop-filter: blur(10px);
+      }
+
+      .shell[data-page="home"] .balance-label {
+        color: #fff;
+        font-size: 13px;
+      }
+
+      .shell[data-page="home"] .balance {
+        font-size: 28px;
+      }
+
+      .shell[data-page="home"] .account-number {
+        margin-bottom: 12px;
+        color: #cfe6ff;
+      }
+
+      .spending-limit {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 -15px;
+        padding: 8px 15px;
+        color: #75e6f5;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+        background: #172a99a8;
+      }
+
+      .spending-limit strong {
+        padding: 4px 6px;
+        color: #17234c;
+        font-size: 9px;
+        background: #d9ff45;
+        border-radius: 4px;
+      }
+
+      .shell[data-page="home"] .content {
+        padding-top: 13px;
+        background: #fff;
+      }
+
+      .shell[data-page="home"] .service-card {
+        border: 0;
+        box-shadow: 0 8px 24px #15336e16;
+      }
+
+      .shell[data-page="home"] .service-icon,
+      .shell[data-page="home"] .service-icon.gold,
+      .shell[data-page="home"] .service-icon.purple,
+      .shell[data-page="home"] .service-icon.green {
+        width: 46px;
+        height: 46px;
+        color: #123dc5;
+        background: #fff;
+        border: 1px solid #edf0f7;
+        border-radius: 14px;
+        box-shadow: 0 7px 17px #28376c18;
+      }
+
+      .shell[data-page="home"] .service-item {
+        color: #17233d;
+      }
+
+      .shell[data-page="home"] .promo-card {
+        background:
+          radial-gradient(circle at 83% 50%, #20d6ff7a 0 15%, transparent 38%),
+          linear-gradient(120deg, #1732c3, #075de2 65%, #05a4e1);
+        box-shadow: 0 12px 28px #073fb32d;
+      }
+
+      .shell[data-page="home"] .bottom-nav {
+        right: 12px;
+        bottom: 10px;
+        left: 12px;
+        min-height: 72px;
+        color: #fff;
+        background: linear-gradient(100deg, #1e52da, #2445c8);
+        border: 0;
+        border-radius: 20px;
+        box-shadow: 0 12px 30px #173fa43e;
+      }
+
+      .shell[data-page="home"] .nav-item {
+        color: #b7c8f8;
+      }
+
+      .shell[data-page="home"] .nav-item.active {
+        color: #fff;
+      }
+
+      .shell[data-page="home"] .qr-nav-button {
+        color: #1746ca;
+        background: linear-gradient(145deg, #e8efff, #bcd3ff);
+        border-color: #2850cc;
+        box-shadow: 0 8px 20px #061d755c;
+      }
+
+      .shell[data-page="home"] .qr-nav small {
+        color: #fff;
+      }
+
+      .shell[data-page="transfer"] .content {
+        padding-right: 16px;
+        padding-left: 16px;
+        background: #f0f6fa;
+      }
+
+      .shell[data-page="transfer"] .task-appbar {
+        grid-template-columns: 38px 1fr 38px;
+        min-height: 68px;
+        margin-right: -16px;
+        margin-bottom: 14px;
+        margin-left: -16px;
+        padding-right: 16px;
+        padding-left: 16px;
+        background: #fff;
+        border-bottom-color: #edf1f7;
+      }
+
+      .shell[data-page="transfer"] .task-appbar strong {
+        color: #163fc4;
+        font-size: 16px;
+      }
+
+      .shell[data-page="transfer"] .back-icon {
+        color: #1642c7;
+        background: transparent;
+      }
+
+      .source-block h2,
+      .transfer-section-title {
+        margin: 0 0 8px;
+        color: #15223a;
+        font-size: 17px;
+        font-weight: 800;
+      }
+
+      .source-account {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 74px;
+        padding: 12px 15px;
+        margin-bottom: 13px;
+        background: #fff;
+        border: 1px solid #dbe4f0;
+        border-radius: 12px;
+        box-shadow: 0 5px 14px #16396d0d;
+      }
+
+      .source-account div {
+        display: flex;
+        gap: 6px;
+        flex-direction: column;
+      }
+
+      .source-account span {
+        color: #1740be;
+        font-size: 11px;
+        font-weight: 720;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+      }
+
+      .source-account strong {
+        color: #17233c;
+        font-size: 18px;
+        font-weight: 620;
+      }
+
+      .source-account > svg {
+        width: 20px;
+        color: #1740c4;
+      }
+
+      .shell[data-page="transfer"] .form-card {
+        padding: 1px 12px 10px;
+        margin-bottom: 10px;
+        background: #fff;
+        border-color: #dce5f1;
+        border-radius: 12px;
+        box-shadow: 0 5px 14px #16396d0d;
+      }
+
+      .shell[data-page="transfer"] .section-title {
+        display: none;
+      }
+
+      .shell[data-page="transfer"] .field {
+        margin-top: 7px;
+      }
+
+      .shell[data-page="transfer"] label {
+        color: #1740c1;
+        font-size: 11px;
+      }
+
+      .shell[data-page="transfer"] input,
+      .shell[data-page="transfer"] .amount-input input {
+        height: 41px;
+        padding-left: 47px;
+        background: #fff;
+        border-color: #e1e7f0;
+        border-radius: 9px;
+        box-shadow: none;
+      }
+
+      .shell[data-page="transfer"] .amount-input input {
+        font-size: 19px;
+        text-align: center;
+      }
+
+      .shell[data-page="transfer"] .field-icon {
+        left: 9px;
+        width: 29px;
+        height: 29px;
+        color: #143fc5;
+        background: #edf2ff;
+      }
+
+      .transfer-actions {
+        display: grid;
+        grid-template-columns: 0.78fr 1.35fr;
+        gap: 10px;
+        margin-top: 5px;
+      }
+
+      .transfer-cancel,
+      .shell[data-page="transfer"] .transfer-actions .btn {
+        min-height: 48px;
+        margin: 0;
+        font-weight: 800;
+        border-radius: 999px;
+      }
+
+      .transfer-cancel {
+        color: #153fc5;
+        cursor: pointer;
+        background: transparent;
+        border: 1.5px solid #153fc5;
+      }
+
+      .shell[data-page="transfer"] .transfer-actions .btn {
+        background: linear-gradient(100deg, #3157df, #7182ec);
+        box-shadow: 0 8px 18px #2949c927;
+      }
+
+      /* Larger transaction typography and bottom-anchored actions */
+      .shell:not([data-page="home"]) .content {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 16px;
+      }
+
+      #transfer.active,
+      #verify.active,
+      #done.active {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+        flex-direction: column;
+      }
+
+      .shell[data-page="home"] .service-item {
+        font-size: 11.5px;
+        line-height: 1.3;
+      }
+
+      .shell[data-page="home"] .home-section-head h2,
+      .shell[data-page="home"] .home-subtitle {
+        font-size: 18px;
+      }
+
+      .shell[data-page="home"] .nav-item {
+        font-size: 11px;
+      }
+
+      .shell[data-page="transfer"] .task-appbar strong {
+        font-size: 18px;
+      }
+
+      .shell[data-page="transfer"] .source-block h2,
+      .shell[data-page="transfer"] .transfer-section-title {
+        margin-bottom: 8px;
+        font-size: 19px;
+      }
+
+      .shell[data-page="transfer"] .source-account {
+        min-height: 78px;
+        margin-bottom: 12px;
+      }
+
+      .shell[data-page="transfer"] .source-account span {
+        font-size: 12px;
+      }
+
+      .shell[data-page="transfer"] .source-account strong {
+        font-size: 20px;
+      }
+
+      .shell[data-page="transfer"] form {
+        display: flex;
+        flex: 1;
+        min-height: 0;
+        flex-direction: column;
+      }
+
+      .shell[data-page="transfer"] .form-card {
+        padding: 2px 13px 11px;
+        margin-bottom: 9px;
+      }
+
+      .shell[data-page="transfer"] .field {
+        margin-top: 8px;
+      }
+
+      .shell[data-page="transfer"] label {
+        margin-bottom: 5px;
+        font-size: 13px;
+      }
+
+      .shell[data-page="transfer"] input,
+      .shell[data-page="transfer"] .amount-input input {
+        height: 45px;
+        font-size: 15px;
+      }
+
+      .shell[data-page="transfer"] .amount-input input {
+        font-size: 21px;
+      }
+
+      .shell[data-page="transfer"] .input-suffix {
+        font-size: 12px;
+      }
+
+      .shell[data-page="transfer"] .error {
+        font-size: 13px;
+      }
+
+      .shell[data-page="transfer"] .transfer-actions {
+        min-height: 52px;
+        margin-top: auto;
+        padding-top: 7px;
+      }
+
+      .shell[data-page="transfer"] .transfer-cancel,
+      .shell[data-page="transfer"] .transfer-actions .btn {
+        min-height: 52px;
+        font-size: 17px;
+      }
+
+      .shell[data-page="verify"] .verify-intro h1 {
+        font-size: 25px;
+      }
+
+      .shell[data-page="verify"] .verify-intro .muted {
+        font-size: 14px;
+      }
+
+      .shell[data-page="verify"] .cammsg {
+        font-size: 13px;
+      }
+
+      .shell[data-page="verify"] #backBtn {
+        min-height: 52px;
+        margin-top: auto;
+        margin-bottom: 2px;
+        font-size: 17px;
+      }
+
+      .shell[data-page="verify"] #startCam {
+        min-height: 52px;
+        font-size: 16px;
+      }
+
+      .shell[data-page="done"] .success {
+        padding-top: 5px;
+      }
+
+      .shell[data-page="done"] .check-wrap {
+        width: 86px;
+        height: 86px;
+        margin-bottom: 12px;
+      }
+
+      .shell[data-page="done"] .success-label {
+        padding: 7px 12px;
+        margin-bottom: 9px;
+        font-size: 11px;
+      }
+
+      .shell[data-page="done"] .success h1 {
+        font-size: 26px;
+      }
+
+      .shell[data-page="done"] .amount {
+        margin-top: 12px;
+        color: #173dca;
+        font-size: 37px;
+      }
+
+      .shell[data-page="done"] .amount-currency {
+        font-size: 12px !important;
+      }
+
+      .success-time {
+        margin: 6px 0 0;
+        color: #75839a;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .shell[data-page="done"] .summary {
+        padding: 0;
+        margin: 16px 0 12px;
+        overflow: hidden;
+        border-color: #d7e1ef;
+        border-radius: 16px;
+      }
+
+      .shell[data-page="done"] .summary .success-payee {
+        display: flex;
+        min-height: 0;
+        gap: 7px;
+        align-items: center;
+        flex-direction: column;
+        padding: 16px 14px;
+        color: #17233d;
+        text-align: center;
+        border-bottom: 1px solid #e3e9f2;
+      }
+
+      .shell[data-page="done"] .summary .success-payee > strong {
+        max-width: 100%;
+        font-size: 20px;
+        text-transform: uppercase;
+      }
+
+      .shell[data-page="done"] .success-payee span,
+      .shell[data-page="done"] .success-payee b,
+      .shell[data-page="done"] .success-payee em {
+        color: #29364c;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+      }
+
+      .shell[data-page="done"] .summary .success-meta {
+        display: flex;
+        min-height: 40px;
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 9px 14px;
+        color: #718097;
+        font-size: 12px;
+        border-bottom: 0;
+      }
+
+      .shell[data-page="done"] .success-meta strong {
+        max-width: 65%;
+        color: #172d48;
+        font-size: 13px;
+      }
+
+      .done-actions {
+        margin-top: auto;
+      }
+
+      .shell[data-page="done"] .done-actions .btn {
+        min-height: 52px;
+        font-size: 17px;
+      }
+
+      .receipt-tools {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 4px 0 10px;
+      }
+
+      .receipt-tools button {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        flex-direction: column;
+        color: #263751;
+        font-size: 13px;
+        font-weight: 750;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+      }
+
+      .receipt-tools button span {
+        display: grid;
+        width: 46px;
+        height: 46px;
+        place-items: center;
+        color: #1642c7;
+        background: #fff;
+        border: 1px solid #e0e7f1;
+        border-radius: 50%;
+        box-shadow: 0 7px 18px #15356816;
+      }
+
+      .receipt-tools svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .receipt-thanks {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        flex-direction: column;
+        margin: 3px 0 10px;
+        color: #7a899e;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .receipt-thanks strong {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        color: #1640bd;
+        font-size: 16px;
+        font-weight: 900;
+      }
+
+      .receipt-thanks i {
+        display: grid;
+        width: 23px;
+        height: 23px;
+        place-items: center;
+        color: #fff;
+        font-size: 13px;
+        font-style: normal;
+        background: #ef3453;
+        border-radius: 7px 2px 7px 2px;
+      }
+
       .hidden {
         display: none !important;
       }
+
       @media (max-width: 520px) {
+        html,
+        body {
+          background: var(--canvas);
+        }
+
         .shell {
+          width: 100%;
+          height: 100vh;
+          height: 100dvh;
           margin: 0;
-          min-height: 100vh;
+          border: 0;
           border-radius: 0;
-        }
-        .head {
-          padding: 23px;
-        }
-        .content {
-          padding: 23px;
+          box-shadow: none;
         }
       }
+
+      @media (max-width: 360px) {
+        .content {
+          padding-right: 14px;
+          padding-left: 14px;
+        }
+
+        .quick-action {
+          gap: 4px;
+          font-size: 10px;
+        }
+
+        .balance {
+          font-size: 25px;
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
+        .step,
         .scanline {
           animation: none;
+        }
+
+        .btn {
+          transition: none;
         }
       }
     </style>
   </head>
   <body>
-    <main class="shell">
-      <header class="head">
-        <div class="headtop"><div class="brand">◈ MMISBank</div></div>
-        <div class="sub">Số dư tài khoản</div>
-        <div class="balance" id="balance">25.000.000 <small>VND</small></div>
-      </header>
-      <div class="content">
-        <section class="step active" id="transfer">
-          <div class="progress">
-            <span class="on"></span><span></span><span></span>
+    <main class="shell" id="app" data-page="home">
+      <div class="app-body">
+        <header class="app-header">
+          <div class="status-bar" aria-hidden="true">
+            <span id="statusTime">09:41</span>
+            <div class="status-icons">
+              <span class="signal-bars"><i></i><i></i><i></i><i></i></span>
+              <svg width="14" height="11" viewBox="0 0 24 18" fill="none">
+                <path
+                  d="M2 6.8a15 15 0 0 1 20 0M5.5 10.3a10 10 0 0 1 13 0M9.2 14a4.3 4.3 0 0 1 5.6 0"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                />
+                <circle cx="12" cy="16" r="1.5" fill="currentColor" />
+              </svg>
+              <span class="battery"></span>
+            </div>
           </div>
-          <h1>Thông tin chuyển khoản</h1>
-          <form id="form">
-            <label for="bank">Ngân hàng thụ hưởng</label
-            ><input
-              id="bank"
-              value="Ngân hàng MMISBank"
-              required
-              maxlength="80"
-            /><label for="account">Số tài khoản nhận</label
-            ><input
-              id="account"
-              inputmode="numeric"
-              pattern="[0-9]{6,20}"
-              placeholder="Nhập 6–20 chữ số"
-              required
-            /><label for="receiver">Tên người nhận</label
-            ><input
-              id="receiver"
-              placeholder="Nguyễn Văn A"
-              maxlength="100"
-              required
-            /><label for="money">Số tiền (VND)</label
-            ><input
-              id="money"
-              type="number"
-              min="1000"
-              max="1300000000"
-              step="1000"
-              placeholder="Ví dụ: 500000"
-              required
-            /><label for="memo">Nội dung chuyển khoản</label
-            ><input id="memo" value="MMIS chuyen khoan" maxlength="140" />
-            <div class="error" id="formError" role="alert"></div>
-            <button class="btn" type="submit">Thanh toán</button>
-          </form>
-        </section>
-        <section class="step" id="verify">
-          <div class="progress">
-            <span class="on"></span><span class="on"></span><span></span>
+
+          <div class="topbar">
+            <div class="brand">
+              <span class="brand-mark">M</span>
+              <span>MMISBank</span>
+            </div>
+            <div class="top-actions">
+              <button class="icon-button" type="button" aria-label="Thông báo">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                <span class="notification-dot"></span>
+              </button>
+              <button class="icon-button" type="button" aria-label="Tài khoản">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle
+                    cx="12"
+                    cy="8"
+                    r="3.5"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                  <path
+                    d="M5 20c.6-3.6 3.1-5.5 7-5.5s6.4 1.9 7 5.5"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
-          <h1>Xác thực khuôn mặt</h1>
-          <p class="muted">Đặt khuôn mặt vào khung camera.</p>
-          <div class="summary" id="verifySummary"></div>
-          <div class="camera" id="cameraBox">
-            <video id="video" autoplay muted playsinline></video>
-            <div class="oval"></div>
-            <div class="scanline"></div>
-            <div class="cammsg" id="camMsg">Nhấn “Bật camera” để bắt đầu</div>
+
+          <div class="wallet-overview">
+            <div class="balance-card">
+              <div class="balance-label">Tổng số dư VND</div>
+              <div class="balance-row">
+                <div class="balance" id="balance">
+                  1.300.000.000 <small>VND</small>
+                </div>
+                <button
+                  class="eye"
+                  type="button"
+                  aria-label="Ẩn hoặc hiện số dư"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="2.7"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div class="account-number">MMIS Smart · 1900 8888 6868</div>
+              <div class="spending-limit">
+                <span>Bạn được cấp để chi tiêu</span>
+                <strong>Đến 60TR</strong>
+              </div>
+
+              <div class="quick-actions">
+                <div class="quick-action">
+                  <span class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M12 20V5m0 0L7 10m5-5 5 5"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  Chuyển tiền
+                </div>
+                <div class="quick-action">
+                  <span class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <rect
+                        x="4"
+                        y="5"
+                        width="16"
+                        height="14"
+                        rx="3"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                      />
+                      <path
+                        d="M8 10h8M8 14h5"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </span>
+                  Thanh toán
+                </div>
+                <div class="quick-action">
+                  <span class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M4 12a8 8 0 1 0 2.3-5.7L4 8.6M4 4v4.6h4.6"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  Lịch sử
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="error" id="camError" role="alert"></div>
-          <button class="btn" id="startCam">Bật camera</button
-          ><button class="btn hidden" id="scanBtn">Bắt đầu quét</button
-          ><button class="btn secondary" id="backBtn">Quay lại</button>
-        </section>
-        <section class="step" id="done">
-          <div class="progress">
-            <span class="on"></span><span class="on"></span
-            ><span class="on"></span>
-          </div>
-          <div class="success">
-            <div class="check">✓</div>
-            <h1>Chuyển khoản thành công!</h1>
-            <p class="muted">Giao dịch hoàn tất.</p>
-            <div class="amount" id="doneAmount"></div>
-            <p class="muted">VND</p>
-          </div>
-          <div class="summary" id="doneSummary"></div>
-          <button class="btn" id="again">Thực hiện giao dịch khác</button
-          ><button class="btn secondary" id="reset">Đặt lại số dư</button>
-        </section>
+        </header>
+
+        <div class="content">
+          <section class="step active" id="home">
+            <div class="home-dashboard">
+              <div class="service-card">
+                <div class="home-section-head">
+                  <h2>Tiện ích của bạn</h2>
+                  <button type="button">Tùy chỉnh</button>
+                </div>
+                <div class="service-grid">
+                  <button class="service-item" id="goTransfer" type="button">
+                    <span class="service-icon">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M5 8h14m-4-4 4 4-4 4M19 16H5m4 4-4-4 4-4"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                    Chuyển khoản
+                  </button>
+                  <button class="service-item" type="button">
+                    <span class="service-icon green">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect
+                          x="4"
+                          y="3"
+                          width="16"
+                          height="18"
+                          rx="3"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                        <path
+                          d="M8 7h2v2H8zM14 7h2v2h-2zM8 13h2v2H8zM14 13h2v2h-2z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                    Quét mã QR
+                  </button>
+                  <button class="service-item" type="button">
+                    <span class="service-icon purple">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                        <path
+                          d="M9 17h6M10 7h4"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Nạp điện thoại
+                  </button>
+                  <button class="service-item" type="button">
+                    <span class="service-icon gold">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M9 8h6M9 12h6"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Thanh toán hóa đơn
+                  </button>
+                  <button class="service-item" type="button">
+                    <span class="service-icon purple">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M4 7h16v10H4V7Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M8 7v2m0 6v2m8-10v2m0 6v2M10 12h4"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Vé xem phim
+                  </button>
+                  <button class="service-item" type="button">
+                    <span class="service-icon">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="m3 14 18-8-7 15-2-7-9 0Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                    Vé máy bay
+                  </button>
+                  <button class="service-item" type="button">
+                    <span class="service-icon green">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M4 9h16v11H4V9Zm2-4h12v4H6V5Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M9 13h6"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Gửi tiết kiệm
+                  </button>
+                  <button class="service-item" type="button">
+                    <span class="service-icon gold">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <circle cx="6" cy="12" r="1.8" />
+                        <circle cx="12" cy="12" r="1.8" />
+                        <circle cx="18" cy="12" r="1.8" />
+                      </svg>
+                    </span>
+                    Xem thêm
+                  </button>
+                </div>
+              </div>
+
+              <h2 class="home-subtitle">Ưu đãi dành cho bạn</h2>
+              <div class="promo-card">
+                <div class="promo-kicker">MMIS Rewards</div>
+                <strong>Hoàn tiền đến 20% khi đặt vé xem phim</strong>
+                <span>Áp dụng đến hết tháng này</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="step" id="transfer">
+            <div class="task-appbar">
+              <button
+                class="back-icon"
+                id="homeBack"
+                type="button"
+                aria-label="Về trang chủ"
+              >
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="m15 5-7 7 7 7"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <strong>Chuyển tiền tới số tài khoản</strong>
+              <span></span>
+            </div>
+            <div class="screen-heading">
+              <div>
+                <p class="eyebrow">Giao dịch an toàn</p>
+                <h1>Thông tin giao dịch</h1>
+                <p class="muted">Nhập thông tin người nhận và số tiền.</p>
+              </div>
+            </div>
+
+            <div class="source-block">
+              <h2>Nguồn chuyển tiền</h2>
+              <div class="source-account">
+                <div>
+                  <span>Tài khoản thanh toán · 1900 8888</span>
+                  <strong id="sourceBalance">1.300.000.000 VND</strong>
+                </div>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="m8 10 4 4 4-4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <form id="form">
+              <h2 class="transfer-section-title">Chuyển đến</h2>
+              <div class="form-card">
+                <div class="section-title">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M3 10h18M5 10V20m4-10v10m6-10v10m4-10v10M3 20h18M12 3l9 5H3l9-5Z"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Thông tin thụ hưởng
+                </div>
+
+                <div class="field">
+                  <label for="bank">Ngân hàng thụ hưởng</label>
+                  <div class="input-box">
+                    <span class="field-icon">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M3 10h18M5 10v9m4-9v9m6-9v9m4-9v9M3 19h18M12 3l9 5H3l9-5Z"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                    <input
+                      id="bank"
+                      value="Ngân hàng MMISBank"
+                      required
+                      maxlength="80"
+                      autocomplete="organization"
+                    />
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="account">Số tài khoản nhận</label>
+                  <div class="input-box">
+                    <span class="field-icon">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect
+                          x="3"
+                          y="5"
+                          width="18"
+                          height="14"
+                          rx="3"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                        <path
+                          d="M7 10h10M7 14h6"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    <input
+                      id="account"
+                      inputmode="numeric"
+                      pattern="[0-9]{6,20}"
+                      placeholder="Nhập 6–20 chữ số"
+                      required
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="receiver">Tên người nhận</label>
+                  <div class="input-box">
+                    <span class="field-icon">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle
+                          cx="12"
+                          cy="8"
+                          r="3.5"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                        <path
+                          d="M5 20c.6-3.6 3.1-5.5 7-5.5s6.4 1.9 7 5.5"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    <input
+                      id="receiver"
+                      placeholder="Ví dụ: Nguyễn Văn A"
+                      maxlength="100"
+                      required
+                      autocomplete="name"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-card">
+                <div class="section-title">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect
+                      x="3"
+                      y="5"
+                      width="18"
+                      height="14"
+                      rx="3"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                    <path
+                      d="M3 10h18M16 15h2"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Chi tiết giao dịch
+                </div>
+
+                <div class="field">
+                  <label for="money">Số tiền</label>
+                  <div class="input-box amount-input">
+                    <span class="field-icon">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M12 4v16m4-12.5H9.5a3 3 0 0 0 0 6H14a3 3 0 0 1 0 6H7.5"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    <input
+                      id="money"
+                      type="number"
+                      min="1000"
+                      max="1300000000"
+                      step="1000"
+                      placeholder="0"
+                      required
+                      inputmode="numeric"
+                    />
+                    <span class="input-suffix">VND</span>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="memo">Nội dung chuyển khoản</label>
+                  <div class="input-box">
+                    <span class="field-icon">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </span>
+                    <input
+                      id="memo"
+                      value="MMIS chuyen khoan"
+                      maxlength="140"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="error" id="formError" role="alert"></div>
+              <div class="transfer-actions">
+                <button
+                  class="transfer-cancel"
+                  id="transferCancel"
+                  type="button"
+                >
+                  Quay lại
+                </button>
+                <button class="btn" type="submit">Tiếp tục</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="step" id="verify">
+            <div class="verify-intro">
+              <div class="verify-symbol">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path
+                    d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3m13 5h3a2 2 0 0 0 2-2v-3"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                  <circle cx="9" cy="10" r="1" fill="currentColor" />
+                  <circle cx="15" cy="10" r="1" fill="currentColor" />
+                  <path
+                    d="M8.5 15c1.8 1.5 5.2 1.5 7 0"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <h1>Xác thực khuôn mặt</h1>
+              <p class="muted">
+                Giữ khuôn mặt trong khung và nhìn thẳng vào camera.
+              </p>
+            </div>
+
+            <div class="camera" id="cameraBox">
+              <video id="video" autoplay muted playsinline></video>
+              <div class="oval"></div>
+              <div class="scanline"></div>
+              <div class="cammsg" id="camMsg">Đang chuẩn bị camera...</div>
+            </div>
+            <div class="error" id="camError" role="alert"></div>
+            <button class="btn hidden" id="startCam" type="button">
+              Thử lại camera
+            </button>
+            <button class="btn hidden" id="scanBtn" type="button">
+              Bắt đầu quét
+            </button>
+            <button class="btn secondary" id="backBtn" type="button">
+              Quay lại
+            </button>
+
+            <div class="summary hidden" id="verifySummary"></div>
+          </section>
+
+          <section class="step" id="done">
+            <div class="success">
+              <div class="check-wrap"><div class="check">✓</div></div>
+              <div class="success-label">Giao dịch thành công</div>
+              <h1>Chuyển tiền thành công</h1>
+              <div class="amount" id="doneAmount"></div>
+              <p class="amount-currency">VND</p>
+              <p class="success-time" id="doneTime"></p>
+            </div>
+            <div class="summary" id="doneSummary"></div>
+            <div class="receipt-tools" aria-label="Thao tác với biên lai">
+              <button type="button">
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <circle
+                      cx="6"
+                      cy="12"
+                      r="2.5"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                    <circle
+                      cx="18"
+                      cy="6"
+                      r="2.5"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                    <circle
+                      cx="18"
+                      cy="18"
+                      r="2.5"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                    <path
+                      d="m8.3 10.8 7.4-3.6m-7.4 6 7.4 3.6"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                  </svg>
+                </span>
+                Chia sẻ
+              </button>
+              <button type="button">
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect
+                      x="4"
+                      y="6"
+                      width="16"
+                      height="14"
+                      rx="3"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                    />
+                    <path
+                      d="M9 6 10.5 4h3L15 6M8 13a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+                Lưu ảnh
+              </button>
+              <button type="button">
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M9 8h6M9 12h6"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+                Lưu mẫu
+              </button>
+            </div>
+            <div class="receipt-thanks">
+              <span>Cảm ơn bạn đã sử dụng dịch vụ</span>
+              <strong><i>M</i> MMISBank</strong>
+            </div>
+            <div class="done-actions">
+              <button class="btn" id="again" type="button">
+                Thực hiện giao dịch khác
+              </button>
+              <button class="btn secondary" id="reset" type="button">
+                Về trang chủ
+              </button>
+            </div>
+          </section>
+        </div>
       </div>
-      <div class="footer">MMISBank · OriginDev</div>
+
+      <nav class="bottom-nav" aria-label="Điều hướng chính">
+        <button class="nav-item active" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="m3 11 9-8 9 8v9H3v-9Z"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linejoin="round"
+            />
+            <path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="1.8" />
+          </svg>
+          Trang chủ
+        </button>
+        <button class="nav-item" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect
+              x="3"
+              y="5"
+              width="18"
+              height="14"
+              rx="3"
+              stroke="currentColor"
+              stroke-width="1.8"
+            />
+            <path
+              d="M3 10h18M7 15h3"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          </svg>
+          Thẻ
+        </button>
+        <button class="nav-item qr-nav" type="button" aria-label="Quét mã QR">
+          <span class="qr-nav-button">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M8 8h3v3H8zM14 8h2v2h-2zM8 14h2v2H8zM13 13h3v3h-3z"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <small>Quét QR</small>
+        </button>
+        <button class="nav-item" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M4 12a8 8 0 1 0 2.3-5.7L4 8.6M4 4v4.6h4.6"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Lịch sử
+        </button>
+        <button class="nav-item" type="button">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle
+              cx="12"
+              cy="8"
+              r="3.5"
+              stroke="currentColor"
+              stroke-width="1.8"
+            />
+            <path
+              d="M5 20c.6-3.6 3.1-5.5 7-5.5s6.4 1.9 7 5.5"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+          </svg>
+          Cá nhân
+        </button>
+      </nav>
     </main>
     <script>
       (() => {
@@ -382,7 +2781,8 @@
           stream = null,
           transaction = null,
           busy = false,
-          openingCamera = false;
+          openingCamera = false,
+          balanceVisible = true;
         const $ = (id) => document.getElementById(id);
         const money = (n) => new Intl.NumberFormat("vi-VN").format(n);
         const safe = (s) =>
@@ -399,13 +2799,21 @@
           );
 
         function updateBalance() {
-          $("balance").innerHTML = money(balance) + " <small>VND</small>";
+          $("balance").innerHTML = balanceVisible
+            ? money(balance) + " <small>VND</small>"
+            : "•••••••• <small>VND</small>";
+          $("sourceBalance").textContent = money(balance) + " VND";
         }
 
         function page(id) {
+          $("app").dataset.page = id;
           document
             .querySelectorAll(".step")
             .forEach((s) => s.classList.toggle("active", s.id === id));
+          document.querySelector(".content").scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
         }
 
         function stopCam() {
@@ -437,10 +2845,17 @@
 
           balance -= transaction.amount;
           updateBalance();
+          const completedAt = new Date();
           $("doneAmount").textContent = money(transaction.amount);
+          $("doneTime").textContent =
+            completedAt.toLocaleTimeString("vi-VN", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }) +
+            " - " +
+            completedAt.toLocaleDateString("vi-VN");
           $("doneSummary").innerHTML =
-            detail(transaction) +
-            `<div><span>Thời gian</span><strong>${new Date().toLocaleString("vi-VN")}</strong></div><div><span>Số dư còn lại</span><strong>${money(balance)} VND</strong></div><div><span>Trạng thái</span><strong>Thành công</strong></div>`;
+            `<div class="success-payee"><strong>${safe(transaction.receiver)}</strong><span>${safe(transaction.bank)}</span><b>${safe(transaction.account)}</b><em>${safe(transaction.memo)}</em></div><div class="success-meta"><span>Số dư còn lại</span><strong>${money(balance)} VND</strong></div>`;
           stopCam();
           $("scanBtn").disabled = false;
           $("backBtn").disabled = false;
@@ -500,6 +2915,19 @@
           }
         }
 
+        $("goTransfer").addEventListener("click", () => {
+          page("transfer");
+        });
+
+        $("homeBack").addEventListener("click", () => {
+          stopCam();
+          page("home");
+        });
+
+        $("transferCancel").addEventListener("click", () => {
+          page("home");
+        });
+
         $("form").addEventListener("submit", (e) => {
           e.preventDefault();
           const f = $("form");
@@ -552,13 +2980,35 @@
         });
 
         $("reset").addEventListener("click", () => {
-          balance = INITIAL;
-          updateBalance();
-          $("again").click();
+          transaction = null;
+          $("form").reset();
+          $("bank").value = "Ngân hàng MMISBank";
+          $("memo").value = "MMIS chuyen khoan";
+          page("home");
         });
 
+        document.querySelector(".eye").addEventListener("click", (event) => {
+          balanceVisible = !balanceVisible;
+          updateBalance();
+          event.currentTarget.setAttribute(
+            "aria-label",
+            balanceVisible ? "Ẩn số dư" : "Hiện số dư",
+          );
+        });
+
+        function updateStatusTime() {
+          $("statusTime").textContent = new Intl.DateTimeFormat("vi-VN", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }).format(new Date());
+        }
+
         window.addEventListener("pagehide", stopCam);
+        updateStatusTime();
+        window.setInterval(updateStatusTime, 30000);
         updateBalance();
+        document.querySelector(".content").scrollTop = 0;
       })();
     </script>
   </body>
