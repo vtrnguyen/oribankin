@@ -1104,6 +1104,151 @@
         font-weight: 820;
       }
 
+
+      /* Security demonstration lab */
+      .security-lab {
+        margin-top: 14px;
+        padding: 15px;
+        background: #fff;
+        border: 1px solid #dce6f4;
+        border-radius: 18px;
+        box-shadow: 0 8px 24px #15336e12;
+      }
+
+      .security-lab-head {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+
+      .security-lab-head h3 {
+        margin: 0;
+        color: #162b48;
+        font-size: 15px;
+        font-weight: 850;
+      }
+
+      .security-lab-head p {
+        margin: 4px 0 0;
+        color: #718198;
+        font-size: 10px;
+        line-height: 1.45;
+      }
+
+      .security-badge {
+        flex: 0 0 auto;
+        padding: 5px 8px;
+        color: #735000;
+        font-size: 9px;
+        font-weight: 850;
+        background: #fff4cf;
+        border: 1px solid #f3df9d;
+        border-radius: 999px;
+      }
+
+      .security-field {
+        margin-top: 12px;
+      }
+
+      .security-field > label {
+        margin-bottom: 6px;
+        color: #23446c;
+        font-size: 10px;
+      }
+
+      .security-select {
+        width: 100%;
+        height: 40px;
+        padding: 0 10px;
+        color: #17375e;
+        font-size: 12px;
+        font-weight: 700;
+        background: #f7f9fd;
+        border: 1px solid #dce5f1;
+        border-radius: 10px;
+        outline: none;
+      }
+
+      .scenario-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .scenario-option {
+        position: relative;
+      }
+
+      .scenario-option input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .scenario-option span {
+        display: block;
+        padding: 10px 8px;
+        color: #52657c;
+        font-size: 10px;
+        font-weight: 750;
+        text-align: center;
+        background: #f7f9fd;
+        border: 1px solid #dce5f1;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .scenario-option input:checked + span {
+        color: #173fbd;
+        background: #edf2ff;
+        border-color: #7f9af0;
+        box-shadow: inset 0 0 0 1px #7f9af0;
+      }
+
+      .security-lab-note {
+        margin: 9px 0 0;
+        color: #78889d;
+        font-size: 9px;
+        line-height: 1.5;
+      }
+
+      .verify-status {
+        display: none;
+        margin: 10px 18px 0;
+        padding: 10px 12px;
+        font-size: 11px;
+        font-weight: 750;
+        line-height: 1.45;
+        text-align: center;
+        border-radius: 12px;
+      }
+
+      .verify-status.show {
+        display: block;
+      }
+
+      .verify-status.success {
+        color: #087254;
+        background: #e7f8f1;
+        border: 1px solid #bde9d8;
+      }
+
+      .verify-status.failure {
+        color: #a62f3b;
+        background: #fff0f1;
+        border: 1px solid #f0c8cc;
+      }
+
+      .security-result {
+        margin-top: 8px;
+        color: #728198;
+        font-size: 10px;
+        text-align: center;
+      }
+
       .promo-card {
         position: relative;
         min-height: 104px;
@@ -2459,6 +2604,43 @@
                 </div>
               </div>
 
+              <div class="security-lab">
+                <div class="security-lab-head">
+                  <div>
+                    <h3>Phòng thí nghiệm bảo mật</h3>
+                    <p>Mô phỏng các tình huống xác thực khuôn mặt cho bài tiểu luận.</p>
+                  </div>
+                  <span class="security-badge">DEMO</span>
+                </div>
+
+                <div class="security-field">
+                  <label for="securityMode">Chế độ xác thực</label>
+                  <select id="securityMode" class="security-select">
+                    <option value="baseline">Hệ thống hiện tại — dễ bị giả mạo</option>
+                    <option value="protected" selected>Hệ thống nâng cao — có kiểm tra giả mạo</option>
+                  </select>
+                </div>
+
+                <div class="security-field">
+                  <label>Tình huống kiểm thử</label>
+                  <div class="scenario-grid">
+                    <label class="scenario-option">
+                      <input type="radio" name="attackScenario" value="real" checked />
+                      <span>👤 Khuôn mặt thật</span>
+                    </label>
+                    <label class="scenario-option">
+                      <input type="radio" name="attackScenario" value="deepfake" />
+                      <span>🎭 Deepfake / Replay</span>
+                    </label>
+                  </div>
+                </div>
+
+                <p class="security-lab-note">
+                  Lưu ý: đây là mô phỏng phục vụ trình diễn học thuật; ứng dụng không thực hiện
+                  nhận diện sinh trắc học hoặc phát hiện deepfake thực tế.
+                </p>
+              </div>
+
               <h2 class="home-subtitle">Ưu đãi dành cho bạn</h2>
               <div class="promo-card">
                 <div class="promo-kicker">MMIS Rewards</div>
@@ -2738,6 +2920,8 @@
               <div class="scanline"></div>
               <div class="cammsg" id="camMsg">Đang chuẩn bị camera...</div>
             </div>
+            <div class="verify-status" id="verifyStatus" role="status"></div>
+            <div class="security-result" id="securityResult"></div>
             <div class="error" id="camError" role="alert"></div>
             <button class="btn hidden" id="startCam" type="button">
               Thử lại camera
@@ -2947,7 +3131,9 @@
           transaction = null,
           busy = false,
           openingCamera = false,
-          balanceVisible = true;
+          balanceVisible = true,
+          securityMode = "protected",
+          attackScenario = "real";
         const $ = (id) => document.getElementById(id);
         const money = (n) => new Intl.NumberFormat("vi-VN").format(n);
         const safe = (s) =>
@@ -2994,23 +3180,77 @@
           return `<div><span>Ngân hàng</span><strong>${safe(t.bank)}</strong></div><div><span>Người nhận</span><strong>${safe(t.receiver)}</strong></div><div><span>Số tài khoản</span><strong>${safe(t.account)}</strong></div><div><span>Số tiền</span><strong>${money(t.amount)} VND</strong></div><div><span>Nội dung</span><strong>${safe(t.memo)}</strong></div>`;
         }
 
+        function showVerifyStatus(type, message) {
+          const el = $("verifyStatus");
+          el.className = `verify-status show ${type}`;
+          el.textContent = message;
+        }
+
+        function resetVerifyStatus() {
+          $("verifyStatus").className = "verify-status";
+          $("verifyStatus").textContent = "";
+          $("securityResult").textContent = "";
+        }
+
         async function scanFace() {
           if (busy || !stream || !transaction) return;
           busy = true;
           $("scanBtn").disabled = true;
           $("backBtn").disabled = true;
           $("cameraBox").classList.add("scanning");
-          $("camMsg").textContent = "Đang quét ...";
+          $("camMsg").textContent =
+            securityMode === "protected"
+              ? "Đang kiểm tra khuôn mặt, chuyển động và dấu hiệu giả mạo..."
+              : "Đang xác thực khuôn mặt...";
+
+          resetVerifyStatus();
+          $("securityResult").textContent =
+            "Đang mô phỏng kết quả của bộ máy xác thực...";
 
           await new Promise((r) => setTimeout(r, 2600));
+
           if (!stream) {
             busy = false;
             return;
           }
 
+          const blocked =
+            securityMode === "protected" && attackScenario === "deepfake";
+
+          if (blocked) {
+            $("cameraBox").classList.remove("scanning");
+            $("camMsg").textContent = "Phát hiện dấu hiệu giả mạo";
+            showVerifyStatus(
+              "failure",
+              "Xác thực thất bại: hệ thống mô phỏng phát hiện khuôn mặt có dấu hiệu Deepfake/Replay.",
+            );
+            $("securityResult").textContent =
+              "Giao dịch bị chặn — số dư không thay đổi.";
+            $("scanBtn").disabled = false;
+            $("backBtn").disabled = false;
+            busy = false;
+            return;
+          }
+
+          $("camMsg").textContent =
+            securityMode === "baseline"
+              ? "Xác thực thành công — không phát hiện kiểm tra chống giả mạo."
+              : "Xác thực thành công — vượt qua kiểm tra chống giả mạo.";
+          showVerifyStatus(
+            "success",
+            securityMode === "baseline"
+              ? "Xác thực thành công. Đây là tình huống mô phỏng hệ thống chưa có lớp chống Deepfake."
+              : "Xác thực thành công. Khuôn mặt hợp lệ và vượt qua lớp kiểm tra mô phỏng.",
+          );
+          $("securityResult").textContent =
+            "Cho phép thực hiện giao dịch.";
+
           balance -= transaction.amount;
           updateBalance();
           const completedAt = new Date();
+          const transactionId =
+            "MM" + completedAt.getTime().toString().slice(-10);
+
           $("doneAmount").textContent = money(transaction.amount);
           $("doneTime").textContent =
             completedAt.toLocaleTimeString("vi-VN", {
@@ -3020,14 +3260,13 @@
             " - " +
             completedAt.toLocaleDateString("vi-VN");
           $("doneSummary").innerHTML =
-            `<div class="success-payee"><strong>${safe(transaction.receiver)}</strong><span>${safe(transaction.bank)}</span><b>${safe(transaction.account)}</b><em>${safe(transaction.memo)}</em></div><div class="success-meta"><span>Số dư còn lại</span><strong>${money(balance)} VND</strong></div>`;
+            `<div class="success-payee"><strong>${safe(transaction.receiver)}</strong><span>${safe(transaction.bank)}</span><b>${safe(transaction.account)}</b><em>${safe(transaction.memo)}</em></div><div class="success-meta"><span>Mã giao dịch</span><strong>${transactionId}</strong></div><div class="success-meta"><span>Số dư còn lại</span><strong>${money(balance)} VND</strong></div>`;
           stopCam();
           $("scanBtn").disabled = false;
           $("backBtn").disabled = false;
           busy = false;
           page("done");
         }
-
         async function openCameraAndScan() {
           if (openingCamera || busy) return;
 
@@ -3080,6 +3319,16 @@
           }
         }
 
+        $("securityMode").addEventListener("change", (event) => {
+          securityMode = event.target.value;
+        });
+
+        document.querySelectorAll('input[name="attackScenario"]').forEach((input) => {
+          input.addEventListener("change", (event) => {
+            if (event.target.checked) attackScenario = event.target.value;
+          });
+        });
+
         $("goTransfer").addEventListener("click", () => {
           page("transfer");
         });
@@ -3118,6 +3367,7 @@
             memo: $("memo").value.trim(),
           };
           $("verifySummary").innerHTML = detail(transaction);
+          resetVerifyStatus();
           $("camMsg").textContent = "Đang bật camera và chuẩn bị quét...";
           $("camError").textContent = "";
           $("startCam").textContent = "Bật camera";
